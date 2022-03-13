@@ -1,9 +1,12 @@
 import Geolocation from '@react-native-community/geolocation';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Location} from '../interfaces/appInterfaces';
 
 export const useLocation = () => {
   const [haslocation, setHasLocation] = useState(false);
+  
+  const [routeLines, setRouteLines] = useState<Location[]>([]);
+
   const [initialPosition, setInitialPosition] = useState<Location>({
     latitude: 0,
     longitude: 0,
@@ -17,6 +20,7 @@ export const useLocation = () => {
     getCurrentLocation().then(location => {
       setInitialPosition(location);
       setUserLocation(location);
+      setRouteLines(routes=>[...routeLines, location]);
       setHasLocation(true);
     });
   }, []);
@@ -37,19 +41,25 @@ export const useLocation = () => {
   };
 
   const followUserLocation = () => {
-    Geolocation.watchPosition(
+    watchID.current = Geolocation.watchPosition(
       ({coords}) => {
-        console.log({coords});
-        setUserLocation({
+        const location:Location = {
           latitude: coords.latitude,
           longitude: coords.longitude
-        })
-
+        }
+        setUserLocation({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+        setRouteLines(routes=>[...routeLines, location]);
       },
-      (err) => console.log({err}),
-      {enableHighAccuracy: true, distanceFilter: 5}
+      err => console.log({err}),
+      {enableHighAccuracy: true, distanceFilter: 2},
     );
-    
+  };
+  const watchID = useRef<number>();
+  const stopFollowLocation = () => {
+    if (watchID.current) Geolocation.clearWatch(watchID.current!);
   };
 
   return {
@@ -57,5 +67,8 @@ export const useLocation = () => {
     initialPosition,
     getCurrentLocation,
     followUserLocation,
+    userLocation,
+    stopFollowLocation,
+    routeLines
   };
 };

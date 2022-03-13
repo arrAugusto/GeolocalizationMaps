@@ -1,41 +1,52 @@
 import React, {useEffect, useRef} from 'react';
 import {StyleSheet} from 'react-native';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useLocation} from '../context/useLocation';
 import {LoadingScreen} from '../pages/LoadingScreen';
 import {Fab} from './Fab';
-import { LogBox } from 'react-native';
+import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export const Map = () => {
-  const {haslocation, initialPosition, getCurrentLocation, followUserLocation} =
-    useLocation();
+  const {
+    haslocation,
+    initialPosition,
+    getCurrentLocation,
+    followUserLocation,
+    userLocation,
+    stopFollowLocation,
+    routeLines
+  } = useLocation();
 
   const mapViewRef = useRef<MapView>();
+  const following = useRef<boolean>(true);
+  useEffect(() => {
+    if (following.current) return;
+    const {latitude, longitude} = userLocation;
+    mapViewRef.current?.animateCamera({
+      center: {latitude, longitude},
+    });
+  }, [userLocation]);
 
   useEffect(() => {
     followUserLocation();
-    return () =>{
-      
-    }
-  }, [])
-  
+    return () => {
+      stopFollowLocation;
+    };
+  }, []);
 
   const centerPosition = async () => {
     const {latitude, longitude} = await getCurrentLocation();
+    following.current = true;
     mapViewRef.current?.animateCamera({
-      center: {
-        latitude,
-        longitude,
-      },
+      center: {latitude, longitude},
     });
   };
 
-
   if (!haslocation) {
     return <LoadingScreen />;
-  }else{
+  } else {
     followUserLocation();
   }
   return (
@@ -50,7 +61,14 @@ export const Map = () => {
           longitude: initialPosition.longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.0121,
-        }}>
+        }}
+        onTouchStart={() => (following.current = false)}>
+          <Polyline
+             coordinates={routeLines}
+             strokeColor="black"
+             strokeWidth={5} 
+          />
+
         {/*<Marker
           image={require('../assets/markerTruck.png')}
           coordinate={{
