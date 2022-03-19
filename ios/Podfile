@@ -1,9 +1,22 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '10.0'
 
-target 'mapGeoRutas' do
+target 'RutasApp' do
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
+
+
   config = use_native_modules!
 
   use_react_native!(
@@ -12,7 +25,7 @@ target 'mapGeoRutas' do
     :hermes_enabled => false
   )
 
-  target 'mapGeoRutasTests' do
+  target 'RutasAppTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -25,6 +38,5 @@ target 'mapGeoRutas' do
 
   post_install do |installer|
     react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
