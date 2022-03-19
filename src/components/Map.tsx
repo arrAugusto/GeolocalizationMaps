@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import MapView, {Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useLocation} from '../context/useLocation';
 import {LoadingScreen} from '../pages/LoadingScreen';
 import {Fab} from './Fab';
@@ -73,15 +73,16 @@ export const Map = () => {
           />
         )}
 
-        {/*<Marker
+        <Marker
           image={require('../assets/markerTruck.png')}
           coordinate={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude: initialPosition.latitude,
+            longitude: initialPosition.longitude,
           }}
+
           title="is title"
           description="is des"
-        />*/}
+        />
       </MapView>
       <Fab
         iconName="compass-outline"

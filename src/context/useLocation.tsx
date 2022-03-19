@@ -10,6 +10,7 @@ export const useLocation = () => {
   const [initialPosition, setInitialPosition] = useState<Location>({
     latitude: 0,
     longitude: 0,
+    
   });
   const [userLocation, setUserLocation] = useState<Location>({
     latitude: 0,
@@ -19,16 +20,13 @@ export const useLocation = () => {
   const isMounted = useRef(true);
 
   useEffect(() => {
-      isMounted.current = true;
-      return () =>{
-        isMounted.current = false;
-      }
-    
-  }, [])
-  
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
-
     getCurrentLocation().then(location => {
       if (!isMounted.current) return;
       setInitialPosition(location);
