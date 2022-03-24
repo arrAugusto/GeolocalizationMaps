@@ -9,13 +9,21 @@ export const useLocation = () => {
     const [ routeLines, setRouteLines ] = useState<Location[]>([])
 
     const [ initialPosition, setInitialPosition ] = useState<Location>({
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        latitude: 0,
         longitude: 0,
-        latitude: 0
+        speed: 0
     });
 
     const [ userLocation, setUserLocation] = useState<Location>({
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        latitude: 0,
         longitude: 0,
-        latitude: 0
+        speed: 0
     });
 
     const watchId = useRef<number>();
@@ -53,8 +61,12 @@ export const useLocation = () => {
                 ({ coords }) => {
                     
                     resolve({
+                        accuracy: coords.accuracy,
+                        altitude: coords.altitude,
+                        heading: coords.heading,
                         latitude: coords.latitude,
-                        longitude: coords.longitude
+                        longitude: coords.longitude,
+                        speed: coords.speed
                     });
     
                 },
@@ -71,8 +83,12 @@ export const useLocation = () => {
 
 
                 const location: Location = {
+                    accuracy: coords.accuracy,
+                    altitude: coords.altitude,
+                    heading: coords.heading,
                     latitude: coords.latitude,
-                    longitude: coords.longitude
+                    longitude: coords.longitude,
+                    speed: coords.speed
                 }
 
                 setUserLocation( location );
