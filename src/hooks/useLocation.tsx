@@ -14,7 +14,8 @@ export const useLocation = () => {
         heading: 0,
         latitude: 0,
         longitude: 0,
-        speed: 0
+        speed: 0,
+        fechaNow: null
     });
 
     const [ userLocation, setUserLocation] = useState<Location>({
@@ -23,12 +24,12 @@ export const useLocation = () => {
         heading: 0,
         latitude: 0,
         longitude: 0,
-        speed: 0
+        speed: 0,
+        fechaNow: null
     });
 
     const watchId = useRef<number>();
     const isMounted = useRef(true);
-
 
     useEffect(() => {
         isMounted.current = true;
@@ -58,15 +59,16 @@ export const useLocation = () => {
     const getCurrentLocation = (): Promise<Location> => {
         return new Promise( (resolve, reject) => {
             Geolocation.getCurrentPosition(
-                ({ coords }) => {
-                    
+                ({ coords, timestamp }) => {
+       
                     resolve({
                         accuracy: coords.accuracy,
                         altitude: coords.altitude,
                         heading: coords.heading,
                         latitude: coords.latitude,
                         longitude: coords.longitude,
-                        speed: coords.speed
+                        speed: coords.speed,
+                        fechaNow: timestamp
                     });
     
                 },
@@ -77,7 +79,7 @@ export const useLocation = () => {
 
     const followUserLocation = () => {
         watchId.current = Geolocation.watchPosition(
-            ({ coords }) => {
+            ({ coords,  timestamp }) => {
 
                 if( !isMounted.current ) return;
 
@@ -88,7 +90,8 @@ export const useLocation = () => {
                     heading: coords.heading,
                     latitude: coords.latitude,
                     longitude: coords.longitude,
-                    speed: coords.speed
+                    speed: coords.speed,
+                    fechaNow: timestamp
                 }
 
                 setUserLocation( location );

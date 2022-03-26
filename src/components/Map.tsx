@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {Text} from 'react-native';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import {useLocation} from '../hooks/useLocation';
 import {LoadingScreen} from '../pages/LoadingScreen';
-import {Fab} from './Fab';
+import {Fab} from './Fab'
+import { Text } from 'react-native';
+
 
 interface Props {
   markers?: Marker[];
@@ -32,7 +33,18 @@ export const Map = ({markers}: Props) => {
             stopFollowUserLocation();
         }*/
   }, []);
+  const RestSave= async()=>{
+   await axios
+    .post(
+      `https://coordenadas-truck.herokuapp.com/api/cordenadas`,
+      initialPosition,
+    )
+    .then(res => {
+      console.log(res);
+      console.log('ok>>>>>');
+    });
 
+  }
   useEffect(() => {
     if (!following.current) return;
     console.log('initial >>' + JSON.stringify(initialPosition));
@@ -41,15 +53,7 @@ export const Map = ({markers}: Props) => {
       initialPosition.longitude != 0 &&
       initialPosition.speed != 0
     ) {
-      axios
-        .post(
-          `https://coordenadas-truck.herokuapp.com/api/cordenadas`,
-          initialPosition,
-        )
-        .then(res => {
-          console.log(res);
-          console.log('ok>>>>>');
-        });
+      RestSave()
     }
 
     const {latitude, longitude} = userLocation;
@@ -103,15 +107,7 @@ export const Map = ({markers}: Props) => {
                     description="Esto es una descripción del marcador"
                 /> */}
       </MapView>
-      <Text
-        style={{
-          backgroundColor: '#0093E5',
-          padding: 10,
-          fontSize: 20,
-          color: 'white',
-        }}>
-        {initialPosition.latitude} {initialPosition.longitude}
-      </Text>
+
       <Fab
         iconName="compass-outline"
         onPress={centerPosition}
@@ -131,6 +127,16 @@ export const Map = ({markers}: Props) => {
           right: 20,
         }}
       />
+      
+      <Text
+        style={{
+          backgroundColor: '#0093E5',
+          padding: 10,
+          fontSize: 20,
+          color: 'white',
+        }}>
+          {initialPosition.fechaNow}
+      </Text>
     </>
   );
 };
