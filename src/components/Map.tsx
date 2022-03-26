@@ -53,7 +53,7 @@ export const Map = ({markers}: Props) => {
       initialPosition.longitude != 0 &&
       initialPosition.speed != 0
     ) {
-      RestSave()
+      RestSave();
     }
 
     const {latitude, longitude} = userLocation;
@@ -135,7 +135,7 @@ export const Map = ({markers}: Props) => {
           fontSize: 20,
           color: 'white',
         }}>
-          {initialPosition.fechaNow}
+          {initialPosition.timeDate}
       </Text>
     </>
   );

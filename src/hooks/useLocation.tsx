@@ -15,7 +15,7 @@ export const useLocation = () => {
         latitude: 0,
         longitude: 0,
         speed: 0,
-        fechaNow: null
+        timeDate: null
     });
 
     const [ userLocation, setUserLocation] = useState<Location>({
@@ -25,7 +25,7 @@ export const useLocation = () => {
         latitude: 0,
         longitude: 0,
         speed: 0,
-        fechaNow: null
+        timeDate: null
     });
 
     const watchId = useRef<number>();
@@ -68,7 +68,7 @@ export const useLocation = () => {
                         latitude: coords.latitude,
                         longitude: coords.longitude,
                         speed: coords.speed,
-                        fechaNow: timestamp
+                        timeDate: timestamp
                     });
     
                 },
@@ -91,7 +91,7 @@ export const useLocation = () => {
                     latitude: coords.latitude,
                     longitude: coords.longitude,
                     speed: coords.speed,
-                    fechaNow: timestamp
+                    timeDate: timestamp
                 }
 
                 setUserLocation( location );
