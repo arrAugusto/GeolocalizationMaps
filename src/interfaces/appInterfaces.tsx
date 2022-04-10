@@ -7,5 +7,5 @@ export interface Location {
     latitude: number;
     longitude: number;
     speed: number | null;
-    timeDate: number | null;
+    timeDate: string | null;
 }

@@ -36,13 +36,17 @@ export const Map = ({markers}: Props) => {
   const RestSave= async()=>{
    await axios
     .post(
-      `https://coordenadas-truck.herokuapp.com/api/cordenadas`,
-      initialPosition,
+      `https://truck-rest.herokuapp.com/api/cordenadas`,
+      userLocation,
     )
     .then(res => {
       console.log(res);
       console.log('ok>>>>>');
-    });
+    }, function (error) {
+      console.log("Error");
+    }
+    
+    );
 
   }
   useEffect(() => {
@@ -50,8 +54,7 @@ export const Map = ({markers}: Props) => {
     console.log('initial >>' + JSON.stringify(initialPosition));
     if (
       initialPosition.latitude != 0 &&
-      initialPosition.longitude != 0 &&
-      initialPosition.speed != 0
+      initialPosition.longitude != 0
     ) {
       RestSave();
     }

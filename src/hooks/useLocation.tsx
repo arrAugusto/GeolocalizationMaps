@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 
 import Geolocation from '@react-native-community/geolocation';
 import { Location } from '../interfaces/appInterfaces';
+import moment from 'moment';
 
 export const useLocation = () => {
 
@@ -60,7 +61,7 @@ export const useLocation = () => {
         return new Promise( (resolve, reject) => {
             Geolocation.getCurrentPosition(
                 ({ coords, timestamp }) => {
-       
+                    const timeFecha =  moment().format('YYYY-MM-DD hh:mm:ss');
                     resolve({
                         accuracy: coords.accuracy,
                         altitude: coords.altitude,
@@ -68,7 +69,7 @@ export const useLocation = () => {
                         latitude: coords.latitude,
                         longitude: coords.longitude,
                         speed: coords.speed,
-                        timeDate: timestamp
+                        timeDate: timeFecha
                     });
     
                 },
@@ -83,7 +84,7 @@ export const useLocation = () => {
 
                 if( !isMounted.current ) return;
 
-
+                const timeFecha =  moment().format('YYYY-MM-DD hh:mm:ss');
                 const location: Location = {
                     accuracy: coords.accuracy,
                     altitude: coords.altitude,
@@ -91,7 +92,7 @@ export const useLocation = () => {
                     latitude: coords.latitude,
                     longitude: coords.longitude,
                     speed: coords.speed,
-                    timeDate: timestamp
+                    timeDate: timeFecha
                 }
 
                 setUserLocation( location );
