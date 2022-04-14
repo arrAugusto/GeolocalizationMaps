@@ -6,12 +6,27 @@ import {LoadingScreen} from '../pages/LoadingScreen';
 import {Fab} from './Fab'
 import { Text } from 'react-native';
 
+import BackgroundFetch from "react-native-background-fetch";
 
 interface Props {
   markers?: Marker[];
 }
 
 export const Map = ({markers}: Props) => {
+
+  let status = BackgroundFetch.configure({
+    minimumFetchInterval: 1,
+    forceAlarmManager: true
+  }, async (taskId) => {  // <-- Event callback
+    console.log("[BackgroundFetch] taskId: ", taskId);
+    RestSave();
+    BackgroundFetch.finish(taskId);
+  }, async (taskId) => {  // <-- Task timeout callback
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing and immediately .finish(taskId)
+    BackgroundFetch.finish(taskId);
+  });
+
   const [showPolyline, setShowPolyline] = useState(true);
 
   const {
